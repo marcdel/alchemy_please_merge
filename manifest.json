@@ -1,0 +1,17 @@
+{
+"manifest_version": 2,
+    "name": "Alchemy Please Merge",
+    "description": "Politely request Alchemy merge your pull request",
+    "version": "0.1",
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_end"
+        }
+    ]
+}
