@@ -20,3 +20,10 @@ button.addEventListener ("click", function(e) {
   newCommentField.form.submit()
   newCommentField.value = ""
 })
+
+setInterval(function() {
+  const status = document.querySelector(".mergeability-details").querySelector(".status-meta")
+  const mergeable = status.innerText === "1 pending and 3 successful checks"
+
+  button.disabled = !mergeable
+},1000)
