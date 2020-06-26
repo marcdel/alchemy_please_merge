@@ -25,24 +25,27 @@ function addButtonToPage() {
 
 function didPassCI() {
   const status = document.evaluate("//span[contains(., '1 pending and 3 successful checks')]", document, null, XPathResult.ANY_TYPE, null).iterateNext()
-  return status.innerText.includes("1 pending and 3 successful checks")
+  return status && status.innerText.includes("1 pending and 3 successful checks")
 }
 
 function isApproved() {
   const approval = document.querySelector(".mergeability-details").querySelector(".status-heading")
-  return approval.innerText.includes("Changes approved")
+  return approval && approval.innerText.includes("Changes approved")
+}
+
+function maybeDisableButton(button) {
+  const approved = isApproved()
+  const passedCI = didPassCI()
+  const mergeable = passedCI && approved
+
+  // console.log(`PR mergeable? ${mergeable} - Passed CI? ${passedCI} / Approved? ${approved}`)
+
+  button.disabled = !mergeable
 }
 
 (function () {
   const button = addButtonToPage()
+  maybeDisableButton(button)
 
-  setInterval(function () {
-    const approved = isApproved()
-    const passedCI = didPassCI()
-    const mergeable = passedCI && approved
-
-    // console.log(`PR mergeable? ${mergeable} - Passed CI? ${passedCI} / Approved? ${approved}`)
-
-    button.disabled = !mergeable
-  }, 1000)
+  setInterval(function () {maybeDisableButton(button)}, 1000)
 })()
